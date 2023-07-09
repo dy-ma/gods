@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/dy-ma/gods/lib"
+	"github.com/dy-ma/gods/lib/queue"
+	"github.com/dy-ma/gods/lib/stack"
 )
 
-func testInts(stack lib.Stack) {
+func testStackInts(stack stack.Stack) {
 	values := [5]int{100, 323, 2132, -21, 123}
 
 	for _, val := range values {
@@ -16,47 +17,80 @@ func testInts(stack lib.Stack) {
 	for i := 4; i >= 0; i-- {
 		popped, _ := stack.Pop()
 		if popped != values[i] {
-			fmt.Printf("testInts() Fail: %v != %v\n", values[i], popped)
+			fmt.Printf("testStackInts Fail: %v != %v\n", values[i], popped)
 		}
 	}
 
-	fmt.Println("testInts() Complete")
+	fmt.Println("testStackInts Complete")
 }
 
-func testStrings(stack lib.Stack) {
+func testStackStrings(stack stack.Stack) {
 	stack.Push("First")
 	stack.Push("Second")
 
 	popped, _ := stack.Pop()
 	if popped != ("Second") {
-		panic("testInts() Fail: Pop Second")
+		panic("testStackStrings Fail: Pop Second")
 	}
 
 	stack.Push("Third")
 	popped, _ = stack.Pop()
 	if popped != ("Third") {
-		panic("testInts() Fail: Pop Third")
+		panic("testStackStrings Fail: Pop Third")
 	}
 
 	peeked, ok := stack.Peek()
 	if ok && peeked != "First" {
-		panic("testInts() Fail: Peek")
+		panic("testStackStrings Fail: Peek First")
 	}
 
 	popped, _ = stack.Pop()
 	if popped != ("First") {
-		panic("testInts() Fail")
+		panic("testStackStrings Fail: Pop First")
 	}
 
-	fmt.Println("testStrings() Complete")
+	fmt.Println("testStackStrings Complete")
+}
+
+func testQueueInts(queue queue.Queue) {
+	queue.Enqueue(23)
+	queue.Enqueue(340)
+	queue.Enqueue(-120)
+
+	dq, _ := queue.Dequeue()
+	if dq != 23 {
+		panic("testQueueInts Fail: 23")
+	}
+
+	dq, _ = queue.Dequeue()
+	if dq != 340 {
+		panic("testQueueInts Fail: 340")
+	}
+
+	queue.Enqueue(100)
+
+	dq, _ = queue.Dequeue()
+	if dq != -120 {
+		panic("testQueueInts Fail: -120")
+	}
+
+	fmt.Println("testQueueInts Complete")
 }
 
 func main() {
-	l := new(lib.LinkedListStack)
-	testInts(l)
-	testStrings(l)
+	fmt.Println("== Testing Stacks ==")
+	ls := new(stack.LinkedListStack)
+	testStackInts(ls)
+	testStackStrings(ls)
 
-	a := new(lib.ArrayStack)
-	testInts(a)
-	testStrings(a)
+	as := new(stack.ArrayStack)
+	testStackInts(as)
+	testStackStrings(as)
+
+	fmt.Println("== Testing Queues ==")
+	lq := new(queue.LinkedListQueue)
+	testQueueInts(lq)
+
+	aq := new(queue.ArrayQueue)
+	testQueueInts(aq)
 }

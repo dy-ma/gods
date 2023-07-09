@@ -1,4 +1,4 @@
-package lib
+package stack
 
 // node represents a single node in the linked list stack.
 type node struct {

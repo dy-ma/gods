@@ -1,4 +1,4 @@
-package lib
+package stack
 
 type Stack interface {
 	Push(interface{}) bool
