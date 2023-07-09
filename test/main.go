@@ -6,16 +6,15 @@ import (
 	"github.com/dy-ma/gods/lib"
 )
 
-func testInts() {
+func testInts(stack lib.Stack) {
 	values := [5]int{100, 323, 2132, -21, 123}
-	l := new(lib.LinkedList)
 
 	for _, val := range values {
-		l.Push(val)
+		stack.Push(val)
 	}
 
 	for i := 4; i >= 0; i-- {
-		popped, _ := l.Pop()
+		popped, _ := stack.Pop()
 		if popped != values[i] {
 			fmt.Printf("testInts() Fail: %v != %v\n", values[i], popped)
 		}
@@ -24,24 +23,27 @@ func testInts() {
 	fmt.Println("testInts() Complete")
 }
 
-func testStrings() {
-	l := new(lib.LinkedList)
+func testStrings(stack lib.Stack) {
+	stack.Push("First")
+	stack.Push("Second")
 
-	l.Push("First")
-	l.Push("Second")
-
-	popped, _ := l.Pop()
+	popped, _ := stack.Pop()
 	if popped != ("Second") {
-		panic("testInts() Fail")
+		panic("testInts() Fail: Pop Second")
 	}
 
-	l.Push("Third")
-	popped, _ = l.Pop()
+	stack.Push("Third")
+	popped, _ = stack.Pop()
 	if popped != ("Third") {
-		panic("testInts() Fail")
+		panic("testInts() Fail: Pop Third")
 	}
 
-	popped, _ = l.Pop()
+	peeked, ok := stack.Peek()
+	if ok && peeked != "First" {
+		panic("testInts() Fail: Peek")
+	}
+
+	popped, _ = stack.Pop()
 	if popped != ("First") {
 		panic("testInts() Fail")
 	}
@@ -50,6 +52,11 @@ func testStrings() {
 }
 
 func main() {
-	testInts()
-	testStrings()
+	l := new(lib.LinkedListStack)
+	testInts(l)
+	testStrings(l)
+
+	a := new(lib.ArrayStack)
+	testInts(a)
+	testStrings(a)
 }
